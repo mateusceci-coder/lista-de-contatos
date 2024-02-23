@@ -1,5 +1,4 @@
 export interface contactParams {
-    id: number
     name: string
     phone: string
     address: string

@@ -2,22 +2,23 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { contactParams } from "@/interfaces/ContactParams";
+import { getContactParams } from "@/interfaces/ContactParams";
+import axios from "axios"
 
 
-export default function Contact(contact: contactParams) {
+export default function Contact(data: getContactParams) {
   const [isEditing, setIsEditing] = useState(false);
 
-  const [name, setName] = useState("");
+  const [name, setName] = useState(data.name);
   const [originalName, setOriginalName] = useState("");
 
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState(data.phone);
   const [originalPhone, setOriginalPhone] = useState("");
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(data.email);
   const [originalEmail, setOriginalEmail] = useState("");
 
-  const [originalAddress, setOriginalAddress] = useState("");
+  const [originalAddress, setOriginalAddress] = useState(data.address);
   const [address, setAddress] = useState("");
 
   const handleSave = () => {
@@ -38,6 +39,20 @@ export default function Contact(contact: contactParams) {
     setIsEditing(false);
   };
 
+  const token = sessionStorage.getItem("auth_token")
+
+  const handleDelete = async (id:number) => {
+      try {
+        axios.delete(`http://127.0.0.1:8000/api/contacts/${id}/`,{
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+      } catch (error) {
+        console.log(error)
+      }
+  }
+
   return isEditing ? (
     <div className="p-4 border-2 w-80 flex flex-col my-2 rounded-xl border-black bg-white">
       <div>
@@ -47,6 +62,7 @@ export default function Contact(contact: contactParams) {
           placeholder="Name"
           className="pb-2 border-b-2 mb-6"
           onChange={(e) => setName(e.target.value)}
+          value={name}
         />
       </div>
       <div className="mb-4">
@@ -55,6 +71,7 @@ export default function Contact(contact: contactParams) {
           type="number"
           onChange={(e) => setPhone(e.target.value)}
           placeholder="(xx) xxxxx-xxxx"
+          value={phone}
         />
       </div>
       <div className="mb-4">
@@ -63,6 +80,7 @@ export default function Contact(contact: contactParams) {
           type="email"
           placeholder="johndoe@email.com"
           onChange={(e) => setEmail(e.target.value)}
+          value={email}
         />
       </div>
       <div className="mb-4">
@@ -71,6 +89,7 @@ export default function Contact(contact: contactParams) {
           type="text"
           placeholder="123 Maple Street, Springfield"
           onChange={(e) => setAddress(e.target.value)}
+          value={address}
         />
       </div>
       <div className="mx-auto">
@@ -86,21 +105,21 @@ export default function Contact(contact: contactParams) {
       </div>
     </div>
   ) : (
-    <div className="p-4 border-2 w-80 flex flex-col my-2 rounded-xl border-black bg-white">
+    <div className="p-4 border-2 w-80 flex flex-col my-2 rounded-xl border-black bg-white text-black">
       <div>
-        <h1 className="mb-6 pb-2 border-b-2">{contact.name}</h1>
+        <h1 className="mb-6 pb-2 border-b-2">{data.name}</h1>
       </div>
       <div className="mb-4">
         <Label>Phone:</Label>
-        <p>{contact.phone}</p>
+        <p>{data.phone}</p>
       </div>
       <div className="mb-4">
         <Label>Email:</Label>
-        <p>{contact.email}</p>
+        <p>{data.email}</p>
       </div>
       <div className="mb-4">
         <Label>Address:</Label>
-        <p>{contact.address}</p>
+        <p>{data.address}</p>
       </div>
       <div className="mx-auto">
         <Button
@@ -109,7 +128,7 @@ export default function Contact(contact: contactParams) {
         >
           Edit
         </Button>
-        <Button className="bg-red-500 hover:bg-red-600">Delete</Button>
+        <Button className="bg-red-500 hover:bg-red-600" onClick={() => handleDelete(data.id)}>Delete</Button>
       </div>
     </div>
   );

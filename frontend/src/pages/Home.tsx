@@ -26,7 +26,7 @@ export default function Home() {
     fetchData()
   },[])
 
-  console.log(listContacts)
+  console.log(token)
   return (
     <main className="bg-zinc-300 min-h-screen">
       <nav className="max-w-5xl flex justify-between mx-auto p-10">
@@ -38,7 +38,7 @@ export default function Home() {
       </section>
       <section className="max-w-5xl grid grid-cols-3 mx-auto">
         {listContacts ? listContacts.map((contact) => (
-          <Contact key={contact.id} contact={contact} />
+          <Contact key={contact.id} {...contact} />
         )) : <>
                 <h1>No contacts</h1>
             </>}
