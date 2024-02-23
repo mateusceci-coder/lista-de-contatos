@@ -2,9 +2,10 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { contactParams } from "@/interfaces/ContactParams";
 
 
-export default function Contact() {
+export default function Contact(contact: contactParams) {
   const [isEditing, setIsEditing] = useState(false);
 
   const [name, setName] = useState("");
@@ -87,19 +88,19 @@ export default function Contact() {
   ) : (
     <div className="p-4 border-2 w-80 flex flex-col my-2 rounded-xl border-black bg-white">
       <div>
-        <h1 className="mb-6 pb-2 border-b-2">{name}</h1>
+        <h1 className="mb-6 pb-2 border-b-2">{contact.name}</h1>
       </div>
       <div className="mb-4">
         <Label>Phone:</Label>
-        <p>{phone}</p>
+        <p>{contact.phone}</p>
       </div>
       <div className="mb-4">
         <Label>Email:</Label>
-        <p>{email}</p>
+        <p>{contact.email}</p>
       </div>
       <div className="mb-4">
         <Label>Address:</Label>
-        <p>{address}</p>
+        <p>{contact.address}</p>
       </div>
       <div className="mx-auto">
         <Button
