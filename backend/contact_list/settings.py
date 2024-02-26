@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
-    'contacts'
+    'contacts',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -50,7 +51,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'contact_list.urls'
 
@@ -131,4 +135,12 @@ REST_FRAMEWORK = {
     ),
 }
 
-AUTH_USER_MODEL = 'contacts.CustomUser'
+AUTH_USER_MODEL = 'contacts.CustomUser' 
+
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=30)
+}
