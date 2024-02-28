@@ -7,6 +7,7 @@ import axios from "axios";
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("")
 
   const handleSignin = () => {
     window.location.href = "/signin";
@@ -22,10 +23,10 @@ export default function Login() {
       });
       sessionStorage.setItem("accessToken", res.data.access);
       sessionStorage.setItem("refreshToken", res.data.refresh);
+      window.location.href = "/"
     } catch (error) {
-      console.log(error);
+      setErrorMessage(error.response.data.detail);
     }
-    window.location.href = "/"
   };
 
   return (
@@ -38,6 +39,7 @@ export default function Login() {
       >
         <h2 className="text-center mb-4">Enter username and password</h2>
         <div>
+          <p className="mb-1 text-sm text-red-500">{errorMessage}</p>
           <Label>Username</Label>
           <Input type="text" onChange={(e) => setUsername(e.target.value)} data-test="username-login" />
         </div>
