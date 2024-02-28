@@ -15,8 +15,8 @@ export default function Signin() {
       password: password,
     })
 
-    sessionStorage.setItem('auth_token', res.data.access)
-    console.log(sessionStorage.getItem('auth_token'))
+    sessionStorage.setItem('accessToken', res.data.access)
+    sessionStorage.setItem('refreshToken', res.data.refresh)
     window.location.href = '/'
   }
 

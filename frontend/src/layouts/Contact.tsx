@@ -18,8 +18,8 @@ export default function Contact(data: getContactParams) {
   const [email, setEmail] = useState(data.email);
   const [originalEmail, setOriginalEmail] = useState("");
 
-  const [originalAddress, setOriginalAddress] = useState(data.address);
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState(data.address);
+  const [originalAddress, setOriginalAddress] = useState("");
 
   const handleSave = () => {
     setOriginalName(name);
@@ -39,7 +39,7 @@ export default function Contact(data: getContactParams) {
     setIsEditing(false);
   };
 
-  const token = sessionStorage.getItem("auth_token")
+  const token = sessionStorage.getItem("accessToken")
 
   const handleDelete = async (id:number) => {
       try {
@@ -51,6 +51,7 @@ export default function Contact(data: getContactParams) {
       } catch (error) {
         console.log(error)
       }
+      window.location.reload()
   }
 
   return isEditing ? (
