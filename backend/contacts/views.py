@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Contact
 from .serializers import ContactSerializer
 from django.contrib.auth import get_user_model
-from rest_framework import status
+from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -28,12 +28,24 @@ class CreateUserView(APIView):
         password = request.data.get('password')
         if not username or not password:
             return Response({'error': 'Username and password are required'}, status=status.HTTP_400_BAD_REQUEST)
-        
+
         user = get_user_model().objects.create_user(username=username, password=password)
         refresh = RefreshToken.for_user(user)
-        
+
         return Response({
             'refresh': str(refresh),
             'access': str(refresh.access_token),
         })
+
+class LogoutView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        try:
+            refresh_token = request.data.get('refresh_token')
+            token = RefreshToken(refresh_token)
+            token.blacklist()  # Adiciona o token à lista de bloqueio
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
