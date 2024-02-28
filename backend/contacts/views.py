@@ -28,6 +28,8 @@ class CreateUserView(APIView):
         password = request.data.get('password')
         if not username or not password:
             return Response({'error': 'Username and password are required'}, status=status.HTTP_400_BAD_REQUEST)
+        if get_user_model().objects.filter(username=request.data.get('username')).exists():
+            return Response({"detail": "User with this username already exists."}, status=status.HTTP_400_BAD_REQUEST)
 
         user = get_user_model().objects.create_user(username=username, password=password)
         refresh = RefreshToken.for_user(user)
