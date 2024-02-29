@@ -7,6 +7,15 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.http import HttpResponse
+
+
+def create_user_view(request):
+    User = get_user_model()
+    user = User.objects.create(username='username')
+    user.set_password('password')
+    user.save()
+    return HttpResponse('User created successfully')
 
 class ContactViewSet(viewsets.ModelViewSet):
     queryset = Contact.objects.all()
@@ -46,7 +55,7 @@ class LogoutView(APIView):
         try:
             refresh_token = request.data.get('refresh_token')
             token = RefreshToken(refresh_token)
-            token.blacklist()  # Adiciona o token à lista de bloqueio
+            token.blacklist()
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception:
             return Response(status=status.HTTP_400_BAD_REQUEST)
